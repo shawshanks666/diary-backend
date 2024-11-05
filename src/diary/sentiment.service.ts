@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { log } from 'console';
 
 @Injectable()
 export class SentimentAnalysisService {
@@ -16,10 +17,12 @@ export class SentimentAnalysisService {
         const headers = {
           'Authorization': `Bearer ${this.apiToken}`,
         };
-    
+        const sanitizedText = text.replace(/\n/g, '\\n');
+        console.log(sanitizedText);
+        
         try {
-          const response1 = await axios.post(`${this.apiUrl}${this.model1}`, { inputs: text }, { headers });
-          const response2 = await axios.post(`${this.apiUrl}${this.model2}`, { inputs: text }, { headers });
+          const response1 = await axios.post(`${this.apiUrl}${this.model1}`, { inputs: sanitizedText }, { headers });
+          const response2 = await axios.post(`${this.apiUrl}${this.model2}`, { inputs: sanitizedText }, { headers });
     
           // Assuming the API response contains sentiment scores directly
           const sentiment = response1.data[0];

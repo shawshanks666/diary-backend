@@ -26,13 +26,25 @@ export class User {
     nullable: false,
     default: '',
   })
-  email: string;
+  email_address: string;
 
   @Column({
     nullable: false,
     default: '',
   })
   password: string;
+
+  @Column({
+    type: 'date',
+    nullable: true, // Last entry date
+  })
+  lastEntryDate: string;
+
+  @Column({
+    type: 'int',
+    default: 0, // Streak count
+  })
+  streak: number;
 
   @OneToMany(() => Diary, (diary) => diary.user)
   diaries: Diary[];

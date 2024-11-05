@@ -10,9 +10,9 @@ export class CreateDiaryDto {
 
   mood: string;
 
-  @IsNotEmpty()
   @IsInt()
   rating: number;
+
 
   // @IsNotEmpty()
   // @IsInt()

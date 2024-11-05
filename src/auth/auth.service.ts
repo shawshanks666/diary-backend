@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../typeorm/user.entity';
-import { SignUpDto } from '../user/dto/user.dto';
+import { SignUpDto, SignInDto } from '../user/dto/user.dto';
 import { hash,compare } from 'bcrypt';
 @Injectable()
 export class AuthService {
@@ -17,8 +17,11 @@ export class AuthService {
       return this.userRepository.findOneBy({username});
     }
     async findUserByEmail(email:string):Promise<User|undefined> {
-      return this.userRepository.findOneBy({email});
-    }
+      return this.userRepository.findOne({
+        where: {
+          email_address: email  // Use 'email' because the entity's column is 'email_address'
+        }
+      });    }
 
     async signUp(signUpDto: SignUpDto){
 
@@ -34,18 +37,33 @@ export class AuthService {
     }
 
 
-    async signIn(
-        username: string,
-        pass: string,
-      ): Promise<{ access_token: string }> {
-        const user = await this.findUserByName(username);
+    async signIn(props:SignInDto): Promise<{ access_token: string }> {
+      const { username, password, email } = props;
+      let user;
+      console.log(`Attempting to sign in with username: ${username} and email: ${email}`);
+      if (!email){
+        user= await this.findUserByName(username);
+        console.log(`User found by email: ${JSON.stringify(user)}`);
+
+      }
+      else{
+        user = await this.findUserByEmail(email);
+        console.log(`User found by username: ${JSON.stringify(user)}`);
+
+      }
+  
+      
         if (!user){
           throw new HttpException('Invalid credentials username',400);
 
         }
-        const validPassword = await compare(pass, user.password);
+        const validPassword = await compare(password, user.password);
+        console.log(`Password valid: ${validPassword}`);
+
         if (!validPassword) {
-          throw new HttpException('Invalid credentials pword',400);
+
+          throw new HttpException(`Invalid credentials pword ${user.username}`,400);
+
         }
 
         const payload = { sub: user.id, username: user.username, role:user.role };
