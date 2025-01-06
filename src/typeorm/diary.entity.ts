@@ -16,10 +16,10 @@ export class Diary {
   date: string;
 
   @Column({
-    type: 'text',
+    type: 'bytea',
     nullable: false,
   })
-  diaryEntry: string;
+  diaryEntry: Buffer;
 
   @Column({
     type: 'text',
@@ -29,9 +29,12 @@ export class Diary {
 
   @Column({
     type: 'int',
-    nullable: false,
+    nullable: true,
   })
   rating: number;
+
+  @Column({ type: 'bytea' }) 
+  iv: Buffer; // Use Buffer type for binary data
 
   @ManyToOne(() => User, (user) => user.diaries)
   user: User;

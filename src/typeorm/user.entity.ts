@@ -34,6 +34,9 @@ export class User {
   })
   password: string;
 
+  @Column({ type: 'bytea' }) 
+  salt: Buffer; // Use Buffer type for binary data
+
   @Column({
     type: 'date',
     nullable: true, // Last entry date

@@ -3,7 +3,7 @@ import { IsOptional } from 'class-validator';
 export class UpdateDiaryDto {
 
   @IsOptional()
-  diaryEntry?: string;
+  diaryEntry?: Buffer;
 
   @IsOptional()
   mood: string;

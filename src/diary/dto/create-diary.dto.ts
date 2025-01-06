@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsInt, IsDateString } from 'class-validator';
+import { IsNotEmpty, IsInt, IsDateString, IsBIC } from 'class-validator';
 
 export class CreateDiaryDto {
   @IsNotEmpty()
@@ -12,6 +12,9 @@ export class CreateDiaryDto {
 
   @IsInt()
   rating: number;
+
+  @IsNotEmpty()
+  iv: string;
 
 
   // @IsNotEmpty()

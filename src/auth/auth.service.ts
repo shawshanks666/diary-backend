@@ -5,6 +5,8 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../typeorm/user.entity';
 import { SignUpDto, SignInDto } from '../user/dto/user.dto';
 import { hash,compare } from 'bcrypt';
+import * as crypto from 'crypto';
+
 @Injectable()
 export class AuthService {
 
@@ -27,28 +29,28 @@ export class AuthService {
 
       const acc= await this.findUserByEmail(signUpDto.email);
       const protectedPassword= await this.hashPassword(signUpDto.password);
-
+      const salt =  crypto.randomBytes(16);
       if(acc){
         throw new HttpException('Email is already registered',400);
       }
 
-      return this.userRepository.save({...signUpDto, password:protectedPassword});
+      return this.userRepository.save({...signUpDto, password:protectedPassword, salt:salt});
 
     }
 
 
-    async signIn(props:SignInDto): Promise<{ access_token: string }> {
+    async signIn(props:SignInDto): Promise<{ access_token: string, salt:string }> {
       const { username, password, email } = props;
       let user;
-      console.log(`Attempting to sign in with username: ${username} and email: ${email}`);
+      // console.log(`Attempting to sign in with username: ${username} and email: ${email}`);
       if (!email){
         user= await this.findUserByName(username);
-        console.log(`User found by email: ${JSON.stringify(user)}`);
+        // console.log(`User found by email: ${JSON.stringify(user)}`);
 
       }
       else{
         user = await this.findUserByEmail(email);
-        console.log(`User found by username: ${JSON.stringify(user)}`);
+        // console.log(`User found by username: ${JSON.stringify(user)}`);
 
       }
   
@@ -58,7 +60,7 @@ export class AuthService {
 
         }
         const validPassword = await compare(password, user.password);
-        console.log(`Password valid: ${validPassword}`);
+        // console.log(`Password valid: ${validPassword}`);
 
         if (!validPassword) {
 
@@ -69,6 +71,7 @@ export class AuthService {
         const payload = { sub: user.id, username: user.username, role:user.role };
         return {
           access_token: await this.jwtService.signAsync(payload),
+          salt: user.salt,
         };
       }
       

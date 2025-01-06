@@ -29,7 +29,7 @@ export class DiaryService {
     const lastDate = user.lastEntryDate?new Date(user.lastEntryDate):currentDate;
     
     const daysDifference = Math.floor((currentDate.getTime() - lastDate.getTime()) / (1000 * 3600 * 24));
-    console.log(currentDate, lastDate,daysDifference);
+    console.log(currentDate, lastDate, daysDifference);
 
     let newStreak = 0;
     if (daysDifference === 1) {
@@ -48,33 +48,46 @@ export class DiaryService {
     await this.userRepository.save(user);
   }
 
+
+    // const {sentiment, mood}= await this.sentimentAnalysisService.analyzeSentiment(createDiaryDto.diaryEntry);
+    // const weights = {
+    //   positive: 1,
+    //   neutral: 0,
+    //   negative: -1
+    // };
+    
+    // let weightedSum = 0;
+    // let totalWeight = 0;
+    
+    // sentiment.forEach(({ label, score }) => {
+    //   weightedSum += weights[label] * score;
+    //   totalWeight += Math.abs(weights[label]) * score;
+    // });
+    
+    // const sentimentScore = (weightedSum / totalWeight) * 10;
+    // const intScore=  Math.floor(sentimentScore);
+
   async create(createDiaryDto: CreateDiaryDto, userId:number) {
     const user =await this.userRepository.findOneBy({id:userId})
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    const {sentiment, mood}= await this.sentimentAnalysisService.analyzeSentiment(createDiaryDto.diaryEntry);
-    const weights = {
-      positive: 1,
-      neutral: 0,
-      negative: -1
-    };
+
+    const ivBuffer = Buffer.from(createDiaryDto.iv, 'base64');  // Decode the Base64 string to a Buffer
     
-    let weightedSum = 0;
-    let totalWeight = 0;
     
-    sentiment.forEach(({ label, score }) => {
-      weightedSum += weights[label] * score;
-      totalWeight += Math.abs(weights[label]) * score;
-    });
-    
-    const sentimentScore = (weightedSum / totalWeight) * 10;
-    const intScore=  Math.floor(sentimentScore);
+    const encryptedBuffer = Buffer.from(createDiaryDto.diaryEntry, 'base64');  // Decode the encrypted text
+    console.log("iv lenghthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh ", ivBuffer.length, ivBuffer);
+
+    console.log("encrypted len", encryptedBuffer.length, encryptedBuffer);
+
 
     const diary= this.diaryRepository.create({...createDiaryDto,
       user:user,
-      rating:intScore})
-
+      iv:ivBuffer, 
+      diaryEntry: encryptedBuffer,
+      })
+      
       await this.updateUserStreak(userId, createDiaryDto.date);
 
     return this.diaryRepository.save(diary);
@@ -87,18 +100,42 @@ export class DiaryService {
       where: { id: userId },
       relations: ['diaries'],  // Load the diaries relation
     });
-      
-    return user.diaries;
+    
+    const diariesWithBase64 = user.diaries.map(diary => {
+      // Log the original and transformed data for debugging
+      console.log('Original IV Buffer:', diary.iv);
+      console.log('Original Diary Entry Buffer:', diary.diaryEntry);
+    
+      const ivBase64 = diary.iv.toString('base64');
+      const diaryEntryBase64 = diary.diaryEntry.toString('base64');
+    
+      console.log('Transformed IV Base64:', ivBase64);
+      console.log('Transformed Diary Entry Base64:', diaryEntryBase64);
+    
+      // Return the transformed diary object
+      return {
+        ...diary,
+        iv: ivBase64,  
+        diaryEntry: diaryEntryBase64,
+      };
+    });
+    
+    return diariesWithBase64;  
   }
+
 
   findOne(id: number) {
     return this.diaryRepository.findOneBy({id});
   }
 
+
+
   async update(id: number, updateDiaryDto: UpdateDiaryDto) {
     await this.diaryRepository.update(id, updateDiaryDto)
 
     return this.diaryRepository.findOneBy({id});  }
+
+
 
   async remove(id: number) {
     const diary = await this.diaryRepository.findOneBy({ id });
