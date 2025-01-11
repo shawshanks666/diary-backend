@@ -8,10 +8,10 @@ export class SentimentAnalysisService {
     constructor() {}
 
     
-    private readonly apiUrl = 'https://api-inference.huggingface.co/models/'; // Replace with actual URL
+    private readonly apiUrl = 'https://api-inference.huggingface.co/models/'; 
     private readonly model1 = 'cardiffnlp/twitter-roberta-base-sentiment-latest';
     private readonly model2 = 'SamLowe/roberta-base-go_emotions';
-    private readonly apiToken = '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'; // Replace with your token
+    private readonly apiToken = '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'; 
 
     async analyzeSentiment(text: string) {
         const headers = {

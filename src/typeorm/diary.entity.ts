@@ -22,16 +22,22 @@ export class Diary {
   diaryEntry: Buffer;
 
   @Column({
-    type: 'text',
+    type: 'int',
     nullable: true,
   })
-  mood: string;
+  mood: number;
 
   @Column({
     type: 'int',
     nullable: true,
   })
   rating: number;
+
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  count: number;
 
   @Column({ type: 'bytea' }) 
   iv: Buffer; // Use Buffer type for binary data

@@ -6,7 +6,7 @@ export class UpdateDiaryDto {
   diaryEntry?: Buffer;
 
   @IsOptional()
-  mood: string;
+  mood: number;
 
 
 

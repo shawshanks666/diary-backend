@@ -59,13 +59,7 @@ export class DiaryService {
     // let weightedSum = 0;
     // let totalWeight = 0;
     
-    // sentiment.forEach(({ label, score }) => {
-    //   weightedSum += weights[label] * score;
-    //   totalWeight += Math.abs(weights[label]) * score;
-    // });
-    
-    // const sentimentScore = (weightedSum / totalWeight) * 10;
-    // const intScore=  Math.floor(sentimentScore);
+
 
   async create(createDiaryDto: CreateDiaryDto, userId:number) {
     const user =await this.userRepository.findOneBy({id:userId})
@@ -77,9 +71,9 @@ export class DiaryService {
     
     
     const encryptedBuffer = Buffer.from(createDiaryDto.diaryEntry, 'base64');  // Decode the encrypted text
-    console.log("iv lenghthhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh ", ivBuffer.length, ivBuffer);
+    // console.log("iv lenghth ", ivBuffer.length, ivBuffer);
 
-    console.log("encrypted len", encryptedBuffer.length, encryptedBuffer);
+    // console.log("encrypted len", encryptedBuffer.length, encryptedBuffer);
 
 
     const diary= this.diaryRepository.create({...createDiaryDto,

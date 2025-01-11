@@ -8,13 +8,17 @@ export class CreateDiaryDto {
   @IsNotEmpty()
   diaryEntry: string;
 
-  mood: string;
+  @IsInt()
+  mood: number;
 
   @IsInt()
   rating: number;
 
   @IsNotEmpty()
   iv: string;
+
+  @IsInt()
+  count: number;
 
 
   // @IsNotEmpty()
