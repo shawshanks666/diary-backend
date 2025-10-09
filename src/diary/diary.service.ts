@@ -123,7 +123,6 @@ export class DiaryService {
   }
 
 
-
   async update(id: number, updateDiaryDto: UpdateDiaryDto) {
     await this.diaryRepository.update(id, updateDiaryDto)
 
@@ -141,3 +140,5 @@ export class DiaryService {
     return diary; // Return the diary that was removed  }
 }
 }
+
+

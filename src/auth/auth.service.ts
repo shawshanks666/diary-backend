@@ -34,8 +34,12 @@ export class AuthService {
         throw new HttpException('Email is already registered',400);
       }
 
-      return this.userRepository.save({...signUpDto, password:protectedPassword, salt:salt});
-
+      return this.userRepository.save({
+        username: signUpDto.username,
+        password: protectedPassword,
+        salt: salt,
+        email_address: signUpDto.email,
+      });
     }
 
 

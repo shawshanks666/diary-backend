@@ -15,15 +15,15 @@ export class SignUpDto {
 }
 
 export class SignInDto {
-  @IsOptional() // Mark as optional
+  @IsNotEmpty() // Mark as optional
   @MinLength(3)
   username?: string; // Use optional chaining
 
-  @IsOptional() // Mark as optional
+  @IsNotEmpty()
   @MinLength(8)
   password?: string; // Use optional chaining
 
-  @IsOptional() // Mark as optional
+  @IsNotEmpty() // Mark as optional
   @IsEmail()
   email?: string; // Use optional chaining
 }
