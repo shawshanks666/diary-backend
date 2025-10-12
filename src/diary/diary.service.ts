@@ -5,15 +5,12 @@ import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Diary,User } from 'src/typeorm';
 import { NotFoundException } from '@nestjs/common';
-import { SentimentAnalysisService } from './sentiment.service';
 import { log } from 'console';
 @Injectable()
 export class DiaryService {
   constructor(
     @InjectRepository(Diary) private readonly diaryRepository: Repository<Diary>,
     @InjectRepository(User) private userRepository: Repository<User>, 
-    private readonly sentimentAnalysisService: SentimentAnalysisService, // Inject it here
-
   ) {}
   
 

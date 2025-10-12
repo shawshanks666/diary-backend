@@ -4,14 +4,13 @@ import { DiaryController } from './diary.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Diary, User } from 'src/typeorm';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { SentimentAnalysisService } from './sentiment.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Diary, User]), // Ensure Diary is included here
     
   ],
   controllers: [DiaryController],
-  providers: [DiaryService,SentimentAnalysisService],
+  providers: [DiaryService],
   exports: [DiaryService],
 })
 export class DiaryModule {}
