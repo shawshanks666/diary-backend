@@ -121,10 +121,34 @@ export class DiaryService {
 
 
   async update(id: number, updateDiaryDto: UpdateDiaryDto) {
-    await this.diaryRepository.update(id, updateDiaryDto)
 
-    return this.diaryRepository.findOneBy({id});  }
-
+    const partial: any = {};
+  
+    if (updateDiaryDto.iv) {
+      partial.iv = Buffer.from(updateDiaryDto.iv, 'base64');
+    }
+  
+    if (updateDiaryDto.diaryEntry) {
+      partial.diaryEntry = Buffer.from(updateDiaryDto.diaryEntry, 'base64');
+    }
+  
+    if (updateDiaryDto.mood !== undefined) {
+      partial.mood = updateDiaryDto.mood;
+    }
+  
+    if (updateDiaryDto.rating !== undefined) {
+      partial.rating = updateDiaryDto.rating;
+    }
+  
+    if (updateDiaryDto.count !== undefined) {
+      partial.count = updateDiaryDto.count;
+    }
+  
+    await this.diaryRepository.update(id, partial);
+  
+    return this.diaryRepository.findOneBy({ id });
+  }
+  
 
 
   async remove(id: number) {

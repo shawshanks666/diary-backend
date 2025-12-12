@@ -22,16 +22,18 @@ export class DiaryController {
     const userId=diary.sub
     return this.diaryService.findAll(userId);
   }
-
+  
+  @UseGuards(AuthGuard)
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateDiaryDto: UpdateDiaryDto) {
+    return this.diaryService.update(+id, updateDiaryDto);
+  }
   // @Get(':id')
   // findOne(@Param('id') id: string) {
   //   return this.diaryService.findOne(+id);
   // }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateDiaryDto: UpdateDiaryDto) {
-  //   return this.diaryService.update(+id, updateDiaryDto);
-  // }
+
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

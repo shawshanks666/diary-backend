@@ -1,14 +1,4 @@
-import { IsOptional } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateDiaryDto } from './create-diary.dto';
 
-export class UpdateDiaryDto {
-
-  @IsOptional()
-  diaryEntry?: Buffer;
-
-  @IsOptional()
-  mood: number;
-
-
-
-
-}
+export class UpdateDiaryDto extends PartialType(CreateDiaryDto) {}

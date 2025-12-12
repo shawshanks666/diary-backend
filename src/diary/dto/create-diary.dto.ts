@@ -20,8 +20,4 @@ export class CreateDiaryDto {
   @IsInt()
   count: number;
 
-
-  // @IsNotEmpty()
-  // @IsInt()
-  // user: number; // This links the diary entry to a specific user
 }
