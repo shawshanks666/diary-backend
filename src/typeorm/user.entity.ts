@@ -6,7 +6,7 @@ export enum Role {
   USER = 'user',
 }
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn({
     type: 'bigint',

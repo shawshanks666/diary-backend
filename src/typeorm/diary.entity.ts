@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from './user.entity'; // Adjust the import path as needed
 
-@Entity()
+@Entity('diaries')
 export class Diary {
   @PrimaryGeneratedColumn({
     type: 'bigint',
