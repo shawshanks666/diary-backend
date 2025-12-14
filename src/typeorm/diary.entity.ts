@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './user.entity'; // Adjust the import path as needed
 
 @Entity('diaries')
@@ -42,6 +42,12 @@ export class Diary {
   @Column({ type: 'bytea' }) 
   iv: Buffer; // Use Buffer type for binary data
 
+  // @ManyToOne(() => User, (user) => user.diaries)
+  // user: User;
+
+
   @ManyToOne(() => User, (user) => user.diaries)
+  @JoinColumn({ name: 'user_id' })  // <-- matches the Neon table
   user: User;
+
 }

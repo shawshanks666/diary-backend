@@ -37,10 +37,7 @@ export class User {
   @Column({ type: 'bytea' }) 
   salt: Buffer; // Use Buffer type for binary data
 
-  @Column({
-    type: 'date',
-    nullable: true, // Last entry date
-  })
+  @Column({ name: 'lastentrydate', type: 'date', nullable: true })
   lastEntryDate: string;
 
   @Column({
@@ -55,3 +52,5 @@ export class User {
   @Column({ type: 'enum', enum: Role, default: Role.USER })
   role: Role;
 }
+
+
